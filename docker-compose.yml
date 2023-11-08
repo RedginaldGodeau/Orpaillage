@@ -1,0 +1,21 @@
+services:
+  database:
+    container_name: database_container
+    image: postgres:latest
+    restart: always
+    ports: ["5432:5432"]
+    environment:
+      POSTGRES_USER: man
+      POSTGRES_PASSWORD: mypass
+      POSTGRES_DB: db
+
+  shell:
+    container_name: shell_container
+    build:
+      context: docker/shell
+    working_dir: /var/www/application
+    tty: true
+    links:
+      - database
+    volumes:
+      - ./:/var/www/application
