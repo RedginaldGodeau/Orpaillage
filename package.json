@@ -8,6 +8,7 @@
     "eslint-plugin-promise": "^6.1.1"
   },
   "dependencies": {
-    "@commitlint/config-conventional": "^18.1.0"
+    "@commitlint/config-conventional": "^18.1.0",
+    "htmx.org": "^1.9.8"
   }
 }
