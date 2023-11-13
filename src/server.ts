@@ -5,13 +5,13 @@ const port = 8080;
 const app = new Application();
 
 app.use(viewEngine(oakAdapter, etaEngine, {
-  viewRoot: <string>"", 
+  viewRoot: <string>"views", 
 }));
 
-// app.use(async (ctx, next) => {
-//   console.log(`HTTP ${ctx.request.method} on ${ctx.request.url}`);
-//   await next();
-// });
+app.use(async (ctx, next) => {
+   console.log(`HTTP ${ctx.request.method} on ${ctx.request.url}`);
+  await next();
+});
 
 app.use(router.routes());
 app.use(router.allowedMethods());
