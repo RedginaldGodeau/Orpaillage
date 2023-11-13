@@ -1,14 +1,13 @@
 import { Application } from "./deps.ts";
+import router from "./router.ts"
+
 const port = 8080;
 const app = new Application();
 
+app.use(router.routes());
+app.use(router.allowedMethods());
 
-app.use((ctx) => {
-  console.log(`HTTP ${ctx.request.method} on ${ctx.request.url}`);
+app.addEventListener('listen', () => {
+  console.log(`ECOUTE SUR http://localhost:${port}`);
 });
-
-app.use((ctx) => {
-  ctx.response.body = "Hello Deno";
-});
-
 await app.listen({ port });
