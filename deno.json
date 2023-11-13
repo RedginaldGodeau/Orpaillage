@@ -1,5 +1,5 @@
 {
   "tasks": {
-    "dev": "deno run --watch --allow-read --allow-net src/server.ts"
+    "start": "deno run --watch --allow-read --allow-net src/Bootsrap/Kernel.ts"
   }
 }

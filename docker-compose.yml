@@ -8,6 +8,17 @@ services:
       POSTGRES_USER: man
       POSTGRES_PASSWORD: mypass
       POSTGRES_DB: db
+    
+  deno:
+    container_name: backend_container
+    build:
+      context: docker/backend
+    restart: always
+    working_dir: /var/www/application
+    volumes: [./:/var/www/application]
+    ports: ["8080:8080"]
+    links:
+      - database
 
   shell:
     container_name: shell_container
