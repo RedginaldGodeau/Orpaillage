@@ -1,13 +1,14 @@
-
+import { Application } from "./deps.ts";
 const port = 8080;
+const app = new Application();
 
-const handler = (request: Request): Response => {
-  const body = `Your user-agent is:\n\n${
-    request.headers.get("user-agent") ?? "Unknown"
-  }`;
 
-  return new Response(body, { status: 200 });
-};
+app.use((ctx) => {
+  console.log(`HTTP ${ctx.request.method} on ${ctx.request.url}`);
+});
 
-console.log(`HTTP server running. Access it at: http://localhost:8080/`);
-Deno.serve({ port }, handler);
+app.use((ctx) => {
+  ctx.response.body = "Hello Deno";
+});
+
+await app.listen({ port });
