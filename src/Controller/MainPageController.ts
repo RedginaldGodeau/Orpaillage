@@ -1,6 +1,13 @@
-import Kernel from "../Bootsrap/Kernel";
+import Kernel from "../Bootsrap/Kernel.ts";
 
-const Route1 = Kernel.Route.get("/", ctx => ctx.render("index.ejs", {title: "Hello World"}));
-const Route2 = Kernel.Route.get("/test", ctx => ctx.render("index.ejs", {title: "Hello World TEST"}));
+export default function init () {
 
-export {Route1, Route2}
+    Kernel.addGetRoute("/", (ctx, next) => {
+        ctx.render("index.ejs", {title: "Hello World"})
+    })
+
+    Kernel.addGetRoute("/test", (ctx, next) => {
+        ctx.render("index.ejs", {title: "test"})
+    })
+
+}

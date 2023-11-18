@@ -1,32 +1,44 @@
-import { Application, viewEngine, ejsEngine, oakAdapter, load, Router, serve } from "./deps.ts";
+import { Application, viewEngine, ejsEngine, oakAdapter, load, Router, serve, Pool } from "./deps.ts";
+import initController from "../Controller/importer.ts";
 
 class Kernel {
-    Route : Router;
+    Route : Router
     Env : Array<any>
+    RouteList : Array<any>
+    _app : any
+    connexion : any
+
+    addGetRoute(url : string, func: (ctx, next) => void) {   
+        this.RouteList.push(this.Route.get(url, func));
+    }
+    addPostRoute(url : string, func: (ctx, next) => void) {
+        this.RouteList.push(this.Route.post(url, func));
+    }
+
+    async dataBaseConnection() {
+        const databaseUrl = this.Env['DATABASE_URL'];
+        const pool = new Pool(databaseUrl, 1, true);
+        const connection = await pool.connect();
+        return connection;
+    }
 
     async init () {
-        const env = await load();
-        const port = env["PORT"];
-        const app = new Application();
+        this.Env = await load();
+        this._app = new Application();
+        const port = this.Env["PORT"];
 
-        app.use(viewEngine(oakAdapter, ejsEngine, {viewRoot: "./templates"}));
-
-        const router = new Router();
-
+        this._app.use(viewEngine(oakAdapter, ejsEngine, {viewRoot: "./templates"}));
+        this.Route = new Router();
         
+        this.RouteList = [];
+        initController();
 
-        for await (const controller of Deno.readDir(`./src/Controller`)) {
-            import(`../Controller/${controller.name}`)
-        }
+        this._app.use(this.Route.routes());
+        this._app.use(this.Route.allowedMethods());
 
-        app.use(router.routes());
-        app.use(router.allowedMethods());
-        
 
-        this.Env = env;
-        this.Route = router;
 
-        await app.listen({ port });
+        await this._app.listen({ port });
     }
 
     constructor () {
@@ -34,4 +46,4 @@ class Kernel {
     }
 }
 
-export default new Kernel()
+export default new Kernel();
