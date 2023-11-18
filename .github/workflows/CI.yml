@@ -4,12 +4,18 @@ on: ["push", "pull_request"]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Setup Repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Deno
+        uses: denoland/setup-deno@61fe2df320078202e33d7d5ad347e7dcfa0e8f31
         with:
-          node-version: 16
-      - run: npm ci
-      - run: npm install --save-dev eslint
-      - run: npx eslint src/
-  
+          deno-version: v1.x
+
+      - name: Run linter
+        run: deno lint
+
+      - name: Run tests
+        run: deno test -A

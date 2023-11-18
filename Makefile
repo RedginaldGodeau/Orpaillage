@@ -15,6 +15,4 @@ node-module: node_modules
 
 .PHONY: ci
 ci:
-	@docker compose exec shell npm ci
-	@docker compose exec shell npx eslint src/
-	@docker compose exec shell npm test
+	@docker compose exec shell deno lint
